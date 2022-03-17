@@ -1,0 +1,266 @@
+from UI.UI_consola import *
+import unittest
+
+class Teste(unittest.TestCase):
+
+    def test_c_stud(self):
+        tests = Student(123, "Bob", "Dylan")
+        self.assertEqual(tests.get_id(), 123)
+        self.assertEqual(tests.get_nume(), "Bob")
+        self.assertEqual(tests.get_prenume(), "Dylan")
+
+    def test_c_disc(self):
+        dis = Disciplina("romana", "Limba Romana", "Jon Bon")
+        self.assertEqual(dis.get_id(), "romana")
+        self.assertEqual(dis.get_nume(), "Limba Romana")
+        self.assertEqual(dis.get_profesor(), "Jon Bon")
+
+    def test_a_stud(self):
+        c = Catalog()
+        stud = Student(123, "Bob", "Dylan")
+        c.store(stud)
+        self.assertEqual(c.ctl[123].get_id(), 123)
+        self.assertEqual(c.ctl[123].get_nume(), "Bob")
+        self.assertEqual(c.ctl[123].get_prenume(), "Dylan")
+
+    def test_a_dis(self):
+        c = Catalog()
+        dis = Disciplina("romana", "Limba Romana", "Jon Bon")
+        c.add_disciplina(dis)
+        self.assertEqual(c.discipline["romana"].get_nume(), "Limba Romana")
+        self.assertEqual(c.discipline["romana"].get_profesor(), "Jon Bon")
+        self.assertEqual(c.discipline["romana"].get_id(), "romana")
+
+    def test_s_stud(self):
+        c = Catalog()
+        stud = Student(123, "Bob", "Dylan")
+        c.store(stud)
+        c.delete(stud.get_id())
+        self.assertFalse(stud.get_id() in c.ctl)
+        c.store(stud)
+        self.assertRaises(Eroare, c.delete, 12)
+
+    def test_s_dis(self):
+        c = Catalog()
+        dis = Disciplina("romana", "Limba Romana", "Jon Bon")
+        c.add_disciplina(dis)
+        c.del_disciplina(dis.get_id())
+        self.assertFalse(dis.get_id() in c.discipline)
+        c.add_disciplina(dis)
+        self.assertRaises(Eroare, c.del_disciplina, "123")
+
+    def test_a_stud_ex(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        self.assertRaises(Eroare, repos.adaugare_s, -5, "Bill", "Bob")
+        self.assertRaises(Eroare, repos.adaugare_s, 123, "Bi3ll", "Bob")
+        self.assertRaises(Eroare, repos.adaugare_s, 123, "Bill", "B6ob")
+        self.assertRaises(TypeError, repos.adaugare_s, "abc", "Bill", "Bob")
+
+    def test_a_disc_ex(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        self.assertRaises(Eroare, repos.adaugare_d, "5", "Mat3e", "Bob")
+        self.assertRaises(Eroare, repos.adaugare_d, "5", "Mate", "Bo8b")
+        self.assertRaises(Eroare, repos.adaugare_d, "5", "Mate", "")
+        self.assertRaises(Eroare, repos.adaugare_d, "", "Mate", "Bob")
+
+    def test_s_stud_ex(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        self.assertRaises(Eroare, repos.stergere_s, 34)
+        self.assertRaises(Eroare, repos.stergere_s, "34")
+
+    def test_s_disc_ex(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        self.assertRaises(Eroare, repos.stergere_d, "34")
+        self.assertRaises(Eroare, repos.stergere_d, 34)
+
+    def test_stat_list(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        serv = Service(repos)
+        stud = Student(123, "Bob", "Dylan")
+        cat.store(stud)
+        stud = Student(12, "Hec", "Man")
+        cat.store(stud)
+        stud = Student(1, "Jil", "Tom")
+        cat.store(stud)
+        dis = Disciplina("romana", "Limba Romana", "Jon Bon")
+        cat.add_disciplina(dis)
+        serv.adauga_nota(123, "romana", 10)
+        serv.adauga_nota(12, "romana", 8)
+        serv.adauga_nota(1, "romana", 9)
+        lista = serv.afiseaza_ordonat("romana", "nume")
+        self.assertEqual (lista[0].nume , "Bob Dylan")
+        self.assertEqual (lista[0].note , [10])
+        self.assertEqual (lista[1].nume , "Hec Man")
+        self.assertEqual (lista[1].note , [8])
+        self.assertEqual (lista[2].nume , "Jil Tom")
+        self.assertEqual (lista[2].note , [9])
+
+        lista = serv.afiseaza_ordonat("romana", "nota")
+        self.assertEqual (lista[2].nume , "Bob Dylan")
+        self.assertEqual (lista[2].note , [10])
+        self.assertEqual (lista[0].nume , "Hec Man")
+        self.assertEqual (lista[0].note , [8])
+        self.assertEqual (lista[1].nume , "Jil Tom")
+        self.assertEqual (lista[1].note , [9])
+
+    def test_top_list(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        serv = Service(repos)
+        stud = Student(123, "Bob", "Dylan")
+        cat.store(stud)
+        stud = Student(12, "Hec", "Man")
+        cat.store(stud)
+        stud = Student(1, "Jil", "Tom")
+        cat.store(stud)
+        stud = Student(2, "Boy", "Im")
+        cat.store(stud)
+        stud = Student(3, "Tired", "Man")
+        cat.store(stud)
+        dis = Disciplina("romana", "Limba Romana", "Jon Bon")
+        cat.add_disciplina(dis)
+        serv.adauga_nota(123, "romana", 10)
+        serv.adauga_nota(123, "romana", 9)
+        serv.adauga_nota(12, "romana", 8)
+        serv.adauga_nota(1, "romana", 2)
+        serv.adauga_nota(2, "romana", 3)
+        serv.adauga_nota(3, "romana", 5)
+        lista = serv.afiseaza_top()
+        self.assertEqual (lista[0].nume , "Bob Dylan")
+        self.assertEqual (lista[0].media , 9.5)
+
+    def test_a_n(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        serv = Service(repos)
+        stud = Student(123, "Bob", "Dylan")
+        cat.store(stud)
+        dis = Disciplina("romana", "Limba Romana", "Jon Bon")
+        cat.add_disciplina(dis)
+        serv.adauga_nota(123, "romana", 10)
+        serv.adauga_nota(123, "romana", 9)
+        self.assertEqual(cat.ctl[123].discipline["romana"].get_note(), [10, 9])
+
+
+    def test_s_n(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        serv = Service(repos)
+        stud = Student(123, "Bob", "Dylan")
+        cat.store(stud)
+        dis = Disciplina("romana", "Limba Romana", "Jon Bon")
+        cat.add_disciplina(dis)
+        serv.adauga_nota(123, "romana", 10)
+        serv.adauga_nota(123, "romana", 10)
+        serv.adauga_nota(123, "romana", 9)
+        serv.sterge_nota(123, "romana", 10)
+        self.assertEqual(cat.ctl[123].discipline["romana"].get_note(), [10, 9])
+
+    def test_caut_stud(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        serv = Service(repos)
+        stud = Student(123, "Bob", "Dylan")
+        cat.store(stud)
+        self.assertEqual(serv.cauta_student(123), "id: 123\nnume: Bob Dylan")
+        self.assertEqual(serv.cauta_student(12), "Nu a fost gasit elevul 12")
+        self.assertEqual(serv.cauta_student("Bob"), "id: 123\nnume: Bob Dylan\n")
+
+    def test_caut_dis(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        serv = Service(repos)
+        dis = Disciplina("romana", "Limba Romana", "Jon Bon")
+        cat.add_disciplina(dis)
+        self.assertEqual(serv.cauta_disciplina("romana"), "id: romana\nnume: Limba Romana\nprofesor: Jon Bon")
+        self.assertEqual(serv.cauta_disciplina("Limba Romana"), "id: romana\nnume: Limba Romana\nprofesor: Jon Bon\n")
+        self.assertEqual(serv.cauta_disciplina("Jon Bon"), "id: romana\nnume: Limba Romana\nprofesor: Jon Bon\n")
+
+    def test_m_stud_prenume(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        serv = Service(repos)
+        stud = Student(123, "Bob", "Dylan")
+        cat.store(stud)
+        repos.modificare_s_prenume(123, "John")
+        self.assertEqual(serv.cauta_student(123), "id: 123\nnume: Bob John")
+        self.assertRaises(KeyError, repos.modificare_s_prenume, 12, "John")
+
+    def test_m_stud_nume(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        serv = Service(repos)
+        stud = Student(123, "Bob", "Dylan")
+        cat.store(stud)
+        repos.modificare_s_nume(123, "John")
+        self.assertEqual(serv.cauta_student(123), "id: 123\nnume: John Dylan")
+        self.assertRaises(KeyError, repos.modificare_s_nume, 12, "John")
+
+    def test_m_dis_nume(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        serv = Service(repos)
+        dis = Disciplina("romana", "Limba Romana", "Jon Bon")
+        cat.add_disciplina(dis)
+        repos.modificare_d_nume("romana", "Lingua Romana")
+        self.assertEqual(serv.cauta_disciplina("romana"), "id: romana\nnume: Lingua Romana\nprofesor: Jon Bon")
+        self.assertRaises(KeyError, repos.modificare_d_nume, 12, "John")
+
+    def test_m_dis_profesor(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        serv = Service(repos)
+        dis = Disciplina("romana", "Limba Romana", "Jon Bon")
+        cat.add_disciplina(dis)
+        repos.modificare_d_profesor("romana", "Hillary Clinton")
+        self.assertEqual(serv.cauta_disciplina("romana"), "id: romana\nnume: Limba Romana\nprofesor: Hillary Clinton")
+        self.assertRaises(KeyError, repos.modificare_d_nume, 12, "John")
+
+    def test_a_stud_ex_bb(self):
+        cat = Catalog()
+        val = Validator()
+        repos = Repos(cat, val)
+        self.assertRaises(Eroare, repos.adaugare_s, 34, "Bil/l", "Bo1b")
+
+"""
+    def run_all_tests(self):
+        self.test_c_stud()
+        self.test_c_disc()
+        self.test_a_stud()
+        self.test_a_dis()
+        self.test_s_stud()
+        self.test_s_dis()
+        self.test_s_disc_ex()
+        self.test_s_stud_ex()
+        self.test_a_disc_ex()
+        self.test_a_stud_ex()
+        self.test_stat_list()
+        self.test_top_list()
+        self.test_a_n()
+        self.test_s_n()
+        self.test_caut_stud()
+        self.test_caut_dis()
+        self.test_m_stud_nume()
+        self.test_m_stud_prenume()
+        self.test_m_dis_nume()
+        self.test_m_dis_profesor()
+"""

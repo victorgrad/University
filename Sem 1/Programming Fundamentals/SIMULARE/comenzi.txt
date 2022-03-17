@@ -1,0 +1,10 @@
+89347, Popescu Ion, electrocasnice, 3000
+97486, Popescu Ioana, parti-auto, 500
+48947, Pop Maria, carti, 300
+43727, Dumitru Cara, mobila, 1700
+35423, Popescu Popel, mobila, 6000
+123, Gion, autostivuitoare, 9919
+444, Hatz, mercedes, 9999999
+1234, Ion Pop, mercedes, 100
+111, Popescu Iona, carti, 132
+999, Last One, autostivuitoare, 420

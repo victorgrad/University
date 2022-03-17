@@ -1,0 +1,16 @@
+Test
+modern
+1200
+3500
+Test2
+modern
+1200
+1000
+Test3
+nomodern
+1000
+1000
+Test4
+nomodern
+1200
+1200.1

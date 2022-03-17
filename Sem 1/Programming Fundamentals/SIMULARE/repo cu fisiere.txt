@@ -1,0 +1,51 @@
+class StudentFileRepository:
+     """
+     Store/retrieve students from file
+     """
+     def __loadFromFile(self):
+         """
+         Load students from file
+         """
+         try:
+            f = open(self.__fName, "r")
+         except IOError:
+            #file not exist
+            return []
+         line = f.readline().strip()
+         rez = []
+         while line!="":
+            attrs = line.split(";")
+            st = Student(attrs[0], attrs[1], Address(attrs[2], attrs[3], attrs[4]))
+            rez.append(st)
+            line = f.readline().strip()
+         f.close()
+         return rez
+
+
+     def store(self, st):
+         """
+         Store the student to the file.Overwrite store
+         st - student
+         Post: student is stored to the file
+         raise DuplicatedIdException for duplicated id
+         """
+         allS = self.__loadFromFile()
+         if st in allS:
+            raise DuplicatedIDException()
+         allS.append(st)
+         self.__storeToFile(allS)
+
+
+     def __storeToFile(self,sts):
+         """
+         Store all the students in to the file
+         raise CorruptedFileException if we can not store to the file
+         """
+         #open file (rewrite file)
+         f = open(self.__fName, "w")
+         for st in sts:
+            strf = st.getId()+";"+st.getName()+";"
+            strf = strf + st.getAdr().getStreet()+";"+str(st.getAdr().getNr())+";"+st.getAdr().getCity()
+            strf = strf+"\n"
+            f.write(strf)
+         f.close()
