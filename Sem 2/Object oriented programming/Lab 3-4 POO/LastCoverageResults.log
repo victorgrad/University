@@ -1,0 +1,21 @@
+[2021-03-15 15:02:41] [info] Start Program:
+Path:"C:\\Users\\Victor\\Desktop\\Facultate\\Lab 3-4 POO\\Debug\\Lab 3-4 POO.exe"
+Arguments:
+Working directory: "C:\\Users\\Victor\\Desktop\\Facultate\\Lab 3-4 POO\\Lab 3-4 POO\\"
+Modules: Selected: C:\Users\Victor\Desktop\Facultate\Lab 3-4 POO\Debug\Lab 3-4 POO.exe Excluded: 
+Sources: Selected: C:\Users\Victor\Desktop\Facultate\Lab 3-4 POO\Lab 3-4 POO Excluded: 
+Log Level: Normal
+Cover Children: 0
+Aggregate by file: 1
+Continue after C++ exception: 0
+Optimized build support: 0
+Export: binary C:\Users\Victor\AppData\Local\Temp\rgonmbgm.isx 
+Input coverage: 
+Unified diff: 
+Excluded line regular expressions: 
+Substitute pdb source paths: 
+
+[2021-03-15 15:02:41] [info] Module: C:\Users\Victor\Desktop\Facultate\Lab 3-4 POO\Debug\Lab 3-4 POO.exe is selected because it matches selected pattern: C:\Users\Victor\Desktop\Facultate\Lab 3-4 POO\Debug\Lab 3-4 POO.exe
+[2021-03-15 15:02:41] [info] ----------------------------------------------------
+[2021-03-15 15:02:41] [info] Coverage binary generated in file: C:\Users\Victor\AppData\Local\Temp\rgonmbgm.isx
+[2021-03-15 15:02:41] [info] ----------------------------------------------------

@@ -1,0 +1,8 @@
+6
+Nume
+Tipul
+12.3
+5
+Nume
+tip
+116.3
